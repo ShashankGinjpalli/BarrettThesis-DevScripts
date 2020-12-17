@@ -94,22 +94,44 @@ def generatePaths(groupedLabels):
     }
 
     # generating flow and paths
-
+    availableFlow = 0
     for i in range(len(groupedLabels)):
         for j in range(len(groupedLabels[i])):
             # print(groupedLabels[i][j])
             if(i != len(groupedLabels) - 1):
+
+               
+                print(groupedLabels[i][j], diagramInfo["target"])
+                if(labelNames.index(groupedLabels[i][j]) in diagramInfo["target"]):
+                    # calculate the path cost availible to use
+                    availableFlow = 0
+                else:
+                    availableFlow = 1000
+
+                flow = []
+                for a in range(len(groupedLabels[i + 1])):
+                    if(a == len(groupedLabels[i + 1]) - 1):
+                        flowAmount = availableFlow
+                    else:
+                        flowAmount = random.randint(availableFlow//2, availableFlow)
+                    availableFlow -= flowAmount
+                    flow.append(flowAmount)
+
+
+                print(flow)
                 
+
+
                 for k in range(len(groupedLabels[i + 1])):
                     # print(groupedLabels[i][j], groupedLabels[i + 1][k])
                     diagramInfo["source"].append(labelNames.index(groupedLabels[i][j]))
                     diagramInfo["target"].append(labelNames.index(groupedLabels[i + 1][k]))
-                   
+                    randomIndex = random.randint(0, len(flow) - 1)
                        
-                        # print(randomValue)
-                        # diagramInfo["value"].append(pathCosts[randomValue])
-                        # pathCosts.pop(randomValue)
-                    diagramInfo["value"].append(1)
+                    # print(randomValue)
+                    diagramInfo["value"].append(flow[randomIndex])
+                    flow.pop(randomIndex)
+                    # diagramInfo["value"].append(1)
 
     
     fig = go.Figure(data=[go.Sankey(
