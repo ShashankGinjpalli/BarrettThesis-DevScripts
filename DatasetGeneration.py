@@ -104,16 +104,20 @@ def generatePaths(groupedLabels):
                 print(groupedLabels[i][j], diagramInfo["target"])
                 if(labelNames.index(groupedLabels[i][j]) in diagramInfo["target"]):
                     # calculate the path cost availible to use
+                    indexes = [index for index,x in enumerate(diagramInfo["target"]) if x == labelNames.index(groupedLabels[i][j])]
                     availableFlow = 0
+                    for index in indexes:
+                        availableFlow += diagramInfo["value"][index]
+
                 else:
-                    availableFlow = 1000
+                    availableFlow = 100
 
                 flow = []
                 for a in range(len(groupedLabels[i + 1])):
                     if(a == len(groupedLabels[i + 1]) - 1):
                         flowAmount = availableFlow
                     else:
-                        flowAmount = random.randint(availableFlow//2, availableFlow)
+                        flowAmount = random.randint(availableFlow//3, availableFlow//1.5)
                     availableFlow -= flowAmount
                     flow.append(flowAmount)
 
@@ -153,6 +157,6 @@ def generatePaths(groupedLabels):
 
 
 
-lowComplexity()
+# lowComplexity()
 # mediumComplexity()
-# highComplexity()
+highComplexity()
