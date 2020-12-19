@@ -19,8 +19,7 @@ def lowComplexity():
 
     # returns the labels in a grouped format
     groupedLabels = labelGen(timeStepGroups)
-    print(groupedLabels)
-    print(labelNames)
+  
 
     generatePaths(groupedLabels)
 
@@ -28,12 +27,12 @@ def lowComplexity():
 
 def mediumComplexity():
     labelNames.clear()
-    numTimeSteps = 6
+    numTimeSteps = 5
     timeStepGroups = []
     
 
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(1,4))
+        timeStepGroups.append(random.randint(1,3))
     groupedLabels = labelGen(timeStepGroups)
     generatePaths(groupedLabels)
 
@@ -42,17 +41,15 @@ def mediumComplexity():
 
 def highComplexity():
     labelNames.clear()
-    numTimeSteps = 10
+    numTimeSteps = 8
     timeStepGroups = []
     
 
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(2,5))
+        timeStepGroups.append(random.randint(2,4))
 
-    # print(timeStepGroups)
     groupedLabels = labelGen(timeStepGroups)
     generatePaths(groupedLabels)
-    print(labelNames)
     
 
 # generates the labels for each of the time steps
@@ -100,8 +97,6 @@ def generatePaths(groupedLabels):
             # print(groupedLabels[i][j])
             if(i != len(groupedLabels) - 1):
 
-               
-                print(groupedLabels[i][j], diagramInfo["target"])
                 if(labelNames.index(groupedLabels[i][j]) in diagramInfo["target"]):
                     # calculate the path cost availible to use
                     indexes = [index for index,x in enumerate(diagramInfo["target"]) if x == labelNames.index(groupedLabels[i][j])]
@@ -110,19 +105,19 @@ def generatePaths(groupedLabels):
                         availableFlow += diagramInfo["value"][index]
 
                 else:
-                    availableFlow = 100
+                    availableFlow = 10
 
                 flow = []
                 for a in range(len(groupedLabels[i + 1])):
                     if(a == len(groupedLabels[i + 1]) - 1):
                         flowAmount = availableFlow
                     else:
-                        flowAmount = random.randint(availableFlow//3, availableFlow//1.5)
+                        flowAmount = random.randint(availableFlow//2, availableFlow)
                     availableFlow -= flowAmount
                     flow.append(flowAmount)
 
 
-                print(flow)
+                # print(flow)
                 
 
 
@@ -140,11 +135,10 @@ def generatePaths(groupedLabels):
     
     fig = go.Figure(data=[go.Sankey(
     node = dict(
-      pad = 15,
+      pad = 20,
       thickness = 20,
-      line = dict(color = "black", width = 1),
+      line = dict(color = "purple", width = 0),
       label = labelNames,
-      color = "red"
     ),
     link = diagramInfo
     )])
@@ -157,6 +151,6 @@ def generatePaths(groupedLabels):
 
 
 
-# lowComplexity()
-# mediumComplexity()
+lowComplexity()
+mediumComplexity()
 highComplexity()
