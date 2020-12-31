@@ -3,10 +3,14 @@ import numpy as np
 from scipy.stats import norm
 import plotly.graph_objs as go 
 import math
+import os
+
+imageCount = 1
 
 labelHeaders = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 labelHeaders = [char for char in labelHeaders]
 labelNames = []
+
 
 def lowComplexity():
     labelNames.clear()
@@ -21,7 +25,7 @@ def lowComplexity():
     groupedLabels = labelGen(timeStepGroups)
   
 
-    generatePaths(groupedLabels)
+    generatePaths(groupedLabels,"low")
 
 
 
@@ -34,7 +38,7 @@ def mediumComplexity():
     for i in range(numTimeSteps):
         timeStepGroups.append(random.randint(1,3))
     groupedLabels = labelGen(timeStepGroups)
-    generatePaths(groupedLabels)
+    generatePaths(groupedLabels, "med")
 
     
 
@@ -49,7 +53,7 @@ def highComplexity():
         timeStepGroups.append(random.randint(2,4))
 
     groupedLabels = labelGen(timeStepGroups)
-    generatePaths(groupedLabels)
+    generatePaths(groupedLabels,"high")
     
 
 # generates the labels for each of the time steps
@@ -82,7 +86,7 @@ def labelGen(timeStepGroups):
     return groupedLabels
 
 
-def generatePaths(groupedLabels):
+def generatePaths(groupedLabels, complexityLevel):
 
     diagramInfo = {
         "source": [],
@@ -143,14 +147,32 @@ def generatePaths(groupedLabels):
     link = diagramInfo
     )])
 
-    fig.update_layout(title_text="Basic Sankey Diagram", font_size=10)
-    fig.show()
+    fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
+    # fig.show()
+
+    # interactive Images
+    if(complexityLevel == "low"):
+        fig.write_html('Data/interactive/low/DiagramLow'+str(imageCount)+'.html')
+    elif(complexityLevel == "med"):
+        fig.write_html('Data/interactive/medium/DiagramMed'+str(imageCount)+'.html')
+    else:
+        fig.write_html('Data/interactive/high/DiagramHigh'+str(imageCount)+'.html')
+
+    # Static
+    if(complexityLevel == "low"):
+        fig.write_image('Data/static/low/DiagramLow'+str(imageCount)+'.svg')
+    elif(complexityLevel == "med"):
+        fig.write_image('Data/static/medium/DiagramMed'+str(imageCount)+'.svg')
+    else:
+        fig.write_image('Data/static/high/DiagramHigh'+str(imageCount)+'.svg')
+
+ 
 
 
 
+while imageCount <= 10:
+    lowComplexity()
+    mediumComplexity()
+    highComplexity()
 
-
-
-lowComplexity()
-mediumComplexity()
-highComplexity()
+    imageCount += 1
