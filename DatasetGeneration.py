@@ -14,12 +14,13 @@ labelNames = []
 
 def lowComplexity():
     labelNames.clear()
-    numTimeSteps = 3
+    # 2 - 3 
+    numTimeSteps = random.randint(2,3)
     timeStepGroups = []
     
     # generate numbers beween 2 and 4 for the number of indexes for each time step
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(1,3))
+        timeStepGroups.append(random.randint(2,4))
 
     # returns the labels in a grouped format
     groupedLabels = labelGen(timeStepGroups)
@@ -31,12 +32,13 @@ def lowComplexity():
 
 def mediumComplexity():
     labelNames.clear()
-    numTimeSteps = 5
+    # 3 - 5
+    numTimeSteps = random.randint(3,5)
     timeStepGroups = []
     
 
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(1,3))
+        timeStepGroups.append(random.randint(3,5))
     groupedLabels = labelGen(timeStepGroups)
     generatePaths(groupedLabels, "med")
 
@@ -45,12 +47,13 @@ def mediumComplexity():
 
 def highComplexity():
     labelNames.clear()
-    numTimeSteps = 8
+    # 5 - 8
+    numTimeSteps = random.randint(5,8)
     timeStepGroups = []
     
 
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(2,4))
+        timeStepGroups.append(random.randint(4,5))
 
     groupedLabels = labelGen(timeStepGroups)
     generatePaths(groupedLabels,"high")
@@ -114,11 +117,14 @@ def generatePaths(groupedLabels, complexityLevel):
                 flow = []
                 for a in range(len(groupedLabels[i + 1])):
                     if(a == len(groupedLabels[i + 1]) - 1):
+                        # makes sure no flow gets wasted 
                         flowAmount = availableFlow
                     else:
+                        # flow minimum can be 1/2 but maximum of all of the flow
                         flowAmount = random.randint(availableFlow//2, availableFlow)
                     availableFlow -= flowAmount
                     flow.append(flowAmount)
+                    
 
 
                 # print(flow)
@@ -137,6 +143,7 @@ def generatePaths(groupedLabels, complexityLevel):
                     # diagramInfo["value"].append(1)
 
     
+    print(diagramInfo)
     fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 20,
@@ -152,27 +159,32 @@ def generatePaths(groupedLabels, complexityLevel):
 
     # interactive Images
     if(complexityLevel == "low"):
-        fig.write_html('Data/interactive/low/DiagramLow'+str(imageCount)+'.html')
+        fig.write_html('Data/interactive/DiagramLow'+str(imageCount)+'.html')
     elif(complexityLevel == "med"):
-        fig.write_html('Data/interactive/medium/DiagramMed'+str(imageCount)+'.html')
+        fig.write_html('Data/interactive/DiagramMed'+str(imageCount)+'.html')
     else:
-        fig.write_html('Data/interactive/high/DiagramHigh'+str(imageCount)+'.html')
+        fig.write_html('Data/interactive/DiagramHigh'+str(imageCount)+'.html')
 
     # Static
     if(complexityLevel == "low"):
-        fig.write_image('Data/static/low/DiagramLow'+str(imageCount)+'.svg')
+        fig.write_image('Data/static/DiagramLow'+str(imageCount)+'.svg')
     elif(complexityLevel == "med"):
-        fig.write_image('Data/static/medium/DiagramMed'+str(imageCount)+'.svg')
+        fig.write_image('Data/static/DiagramMed'+str(imageCount)+'.svg')
     else:
-        fig.write_image('Data/static/high/DiagramHigh'+str(imageCount)+'.svg')
+        fig.write_image('Data/static/DiagramHigh'+str(imageCount)+'.svg')
 
  
 
 
 
-while imageCount <= 10:
+while imageCount <= 40:
     lowComplexity()
     mediumComplexity()
     highComplexity()
 
     imageCount += 1
+
+
+# lowComplexity()
+# mediumComplexity()
+# highComplexity()
