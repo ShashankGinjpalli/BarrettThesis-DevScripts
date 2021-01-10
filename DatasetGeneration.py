@@ -158,31 +158,37 @@ def generatePaths(groupedLabels, complexityLevel):
     # fig.show()
 
     # interactive Images
-    if(complexityLevel == "low"):
-        fig.write_html('Data/interactive/DiagramLow'+str(imageCount)+'.html')
-    elif(complexityLevel == "med"):
-        fig.write_html('Data/interactive/DiagramMed'+str(imageCount)+'.html')
-    else:
-        fig.write_html('Data/interactive/DiagramHigh'+str(imageCount)+'.html')
+    # if(complexityLevel == "low"):
+    #     fig.write_html('Data/interactive/DiagramLow'+str(imageCount)+'.html')
+    # elif(complexityLevel == "med"):
+    #     fig.write_html('Data/interactive/DiagramMed'+str(imageCount)+'.html')
+    # else:
+    #     fig.write_html('Data/interactive/DiagramHigh'+str(imageCount)+'.html')
 
-    # Static
-    if(complexityLevel == "low"):
-        fig.write_image('Data/static/DiagramLow'+str(imageCount)+'.svg')
-    elif(complexityLevel == "med"):
-        fig.write_image('Data/static/DiagramMed'+str(imageCount)+'.svg')
-    else:
-        fig.write_image('Data/static/DiagramHigh'+str(imageCount)+'.svg')
+    # # Static
+    # if(complexityLevel == "low"):
+    #     fig.write_image('Data/static/DiagramLow'+str(imageCount)+'.svg')
+    # elif(complexityLevel == "med"):
+    #     fig.write_image('Data/static/DiagramMed'+str(imageCount)+'.svg')
+    # else:
+    #     fig.write_image('Data/static/DiagramHigh'+str(imageCount)+'.svg')
 
+
+    fig.write_html('Data/interactive/Diagram'+str(imageCount)+'.html')
+    fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
  
 
 
 
-while imageCount <= 40:
+while imageCount <= 150:
     lowComplexity()
-    mediumComplexity()
-    highComplexity()
-
     imageCount += 1
+    mediumComplexity()
+    imageCount += 1
+    highComplexity()
+    imageCount += 1
+
+    
 
 
 # lowComplexity()
