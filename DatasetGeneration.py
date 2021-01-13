@@ -4,6 +4,7 @@ from scipy.stats import norm
 import plotly.graph_objs as go 
 import math
 import os
+import json
 
 imageCount = 1
 
@@ -174,13 +175,29 @@ def generatePaths(groupedLabels, complexityLevel):
     #     fig.write_image('Data/static/DiagramHigh'+str(imageCount)+'.svg')
 
 
-    fig.write_html('Data/interactive/Diagram'+str(imageCount)+'.html')
+    # fig.write_html('Data/interactive/Diagram'+str(imageCount)+'.html')
     fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
+
+    generateMetaData(diagramInfo)
  
 
+def generateMetaData(diagramMetadata):
+    tempSource = []
+    for i in diagramMetadata['source']:
+        tempSource.append(labelNames[i])
+    tempTarget = []
+    for i in diagramMetadata['target']:
+        tempTarget.append(labelNames[i])
+
+    diagramMetadata['source'] = tempSource
+    diagramMetadata['target'] = tempTarget
+
+    print(diagramMetadata)
+    with open('Data/metadata/image'+str(imageCount)+'_metadata.json','w') as outfile:
+        json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-while imageCount <= 150:
+while imageCount <= 45:
     lowComplexity()
     imageCount += 1
     mediumComplexity()
