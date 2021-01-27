@@ -16,7 +16,7 @@ labelNames = []
 def lowComplexity():
     labelNames.clear()
     # 2 - 3 
-    numTimeSteps = 3
+    numTimeSteps = random.randint(2,3)
     timeStepGroups = []
     
     # generate numbers beween 2 and 4 for the number of indexes for each time step
