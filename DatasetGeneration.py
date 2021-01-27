@@ -16,7 +16,7 @@ labelNames = []
 def lowComplexity():
     labelNames.clear()
     # 2 - 3 
-    numTimeSteps = random.randint(2,3)
+    numTimeSteps = 3
     timeStepGroups = []
     
     # generate numbers beween 2 and 4 for the number of indexes for each time step
@@ -197,7 +197,7 @@ def generateMetaData(diagramMetadata):
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-while imageCount <= 45:
+while imageCount <= 48:
     lowComplexity()
     imageCount += 1
     mediumComplexity()
