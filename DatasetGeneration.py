@@ -102,40 +102,49 @@ def generatePaths(groupedLabels, complexityLevel):
     availableFlow = 0
     for i in range(len(groupedLabels)):
         for j in range(len(groupedLabels[i])):
-            # print(groupedLabels[i][j])
             if(i != len(groupedLabels) - 1):
 
+                # If the labelName is in Target that means that its not a starting index
                 if(labelNames.index(groupedLabels[i][j]) in diagramInfo["target"]):
-                    # calculate the path cost availible to use
+                    # Finding all of the indexes for a label in the target
                     indexes = [index for index,x in enumerate(diagramInfo["target"]) if x == labelNames.index(groupedLabels[i][j])]
                     availableFlow = 0
                     for index in indexes:
                         availableFlow += diagramInfo["value"][index]
 
+                # setting the starting flow with 100 each
                 else:
-                    availableFlow = 10
+                    availableFlow = 100
 
                 flow = []
                 for a in range(len(groupedLabels[i + 1])):
                     if(a == len(groupedLabels[i + 1]) - 1):
-                        # makes sure no flow gets wasted 
+                        # makes sure no flow gets wasted when it is on the last group of that timestep
                         flowAmount = availableFlow
                     else:
-                        # flow minimum can be 1/2 but maximum of all of the flow
-                        flowAmount = random.randint(availableFlow//2, availableFlow)
+                        # building a sliding scale for the flow
+
+                        # flow minimum can be 25% but maximum of all of the flow if it is greater than 100
+                        if(availableFlow >= 100):
+                            flowAmount = round(random.randint(availableFlow//4, availableFlow)/10)*10
+                        # if availible flow is less than 100 then minimum flow increases to 50%
+                        elif (availableFlow >= 50 and availableFlow < 100):
+                            flowAmount = round(random.randint(availableFlow//2, availableFlow)/10)*10
+                        elif(availableFlow < 50 and availableFlow >= 10): 
+                            flowAmount = round(random.randint(availableFlow - 10, availableFlow)/10)*10
+                        else:
+                            flowAmount = round(random.randint(availableFlow//2, availableFlow)/10)*10
+                    
                     availableFlow -= flowAmount
                     flow.append(flowAmount)
                     
-
-
-                # print(flow)
-                
 
 
                 for k in range(len(groupedLabels[i + 1])):
                     # print(groupedLabels[i][j], groupedLabels[i + 1][k])
                     diagramInfo["source"].append(labelNames.index(groupedLabels[i][j]))
                     diagramInfo["target"].append(labelNames.index(groupedLabels[i + 1][k]))
+                    # assiging the flow to a random index
                     randomIndex = random.randint(0, len(flow) - 1)
                        
                     # print(randomValue)
@@ -143,8 +152,10 @@ def generatePaths(groupedLabels, complexityLevel):
                     flow.pop(randomIndex)
                     # diagramInfo["value"].append(1)
 
+    print(labelNames)
+    print(diagramInfo, "\n\n\n")
     
-    print(diagramInfo)
+
     fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 20,
@@ -158,24 +169,7 @@ def generatePaths(groupedLabels, complexityLevel):
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
     # fig.show()
 
-    # interactive Images
-    # if(complexityLevel == "low"):
-    #     fig.write_html('Data/interactive/DiagramLow'+str(imageCount)+'.html')
-    # elif(complexityLevel == "med"):
-    #     fig.write_html('Data/interactive/DiagramMed'+str(imageCount)+'.html')
-    # else:
-    #     fig.write_html('Data/interactive/DiagramHigh'+str(imageCount)+'.html')
-
-    # # Static
-    # if(complexityLevel == "low"):
-    #     fig.write_image('Data/static/DiagramLow'+str(imageCount)+'.svg')
-    # elif(complexityLevel == "med"):
-    #     fig.write_image('Data/static/DiagramMed'+str(imageCount)+'.svg')
-    # else:
-    #     fig.write_image('Data/static/DiagramHigh'+str(imageCount)+'.svg')
-
-
-    # fig.write_html('Data/interactive/Diagram'+str(imageCount)+'.html')
+   
     fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
 
     generateMetaData(diagramInfo)
@@ -192,7 +186,6 @@ def generateMetaData(diagramMetadata):
     diagramMetadata['source'] = tempSource
     diagramMetadata['target'] = tempTarget
 
-    print(diagramMetadata)
     with open('Data/metadata/image'+str(imageCount)+'_metadata.json','w') as outfile:
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
