@@ -129,7 +129,7 @@ def generatePaths(groupedLabels, complexityLevel):
         
             # checking if the label is the starting
             if(groupedLabels[timeStep][group] not in diagramInfo['target']):
-                availableFlow = 100
+                availableFlow = 200
 
             else: 
                 # figure out how much flow a business has
@@ -146,13 +146,13 @@ def generatePaths(groupedLabels, complexityLevel):
             # generate random flows
 
             # minimum number of flow units per flow is 5 to make sure that the number of paths shown matches the number of paths
-            flows = [5] * numberOfFlows
-            availableFlow -= 5*numberOfFlows
+            flows = [10] * numberOfFlows
+            availableFlow -= 10*numberOfFlows
             for temp in range(numberOfFlows):
                 if(temp == numberOfFlows-1):
                     flow = availableFlow
                 else: 
-                    flow = random.randint(availableFlow//4, availableFlow)
+                    flow = round(random.randint(availableFlow//4, availableFlow)/10)*10
                     
                 # randomIndex = random.randint(0, len(flows) - 1)
                 # flows[randomIndex] += flow
