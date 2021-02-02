@@ -97,6 +97,8 @@ def generatePaths(groupedLabels, complexityLevel):
         "value": []
     }
 
+    print("\n\n",complexityLevel)
+
     # print(groupedLabels)
     flowsCount = []
     
@@ -108,6 +110,7 @@ def generatePaths(groupedLabels, complexityLevel):
         flowNumber = random.randint(currentTimeStepLength, nextTimeStepLength*currentTimeStepLength)
         while(flowNumber in flowsCount and len(flowsCount) != (nextTimeStepLength*currentTimeStepLength) - nextTimeStepLength): 
             flowNumber = random.randint(currentTimeStepLength, nextTimeStepLength*currentTimeStepLength)
+            # print("Regenerating Flows")
 
         
 
@@ -117,26 +120,29 @@ def generatePaths(groupedLabels, complexityLevel):
     print(flowsCount)
 
    
-    for timeStep in range(len(groupedLabels) - 1):
+    for timestep in range(len(groupedLabels) - 1):
         timeStepFlows = flowsCount.pop(0)
         print("\n\n")
 
-        flowsPerGroup = generateSetSum(len(groupedLabels[timeStep]), timeStepFlows, len(groupedLabels[timestep + 1]), 1)
-        print(flowsPerGroup)
+        print((len(groupedLabels[timestep]), len(groupedLabels[timestep + 1]), timestep, groupedLabels[timestep], groupedLabels[timestep + 1]))
+        flowsPerGroup = generateSetSum(len(groupedLabels[timestep]), timeStepFlows, len(groupedLabels[timestep + 1]), 1)
+        print("Number of Flows Per Group", flowsPerGroup)
 
-        for group in range(len(groupedLabels[timeStep])):
+        for group in range(len(groupedLabels[timestep])):
 
         
             # checking if the label is the starting
-            if(groupedLabels[timeStep][group] not in diagramInfo['target']):
+            if(labelNames.index(groupedLabels[timestep][group]) not in diagramInfo["target"]):
                 availableFlow = 200
 
             else: 
-                # figure out how much flow a business has
-                i = labelNames.index(groupedLabels[timeStep][group])
-                indexes = [j for j in diagramInfo["target"][j] if j == i]
-                values = [dictionaryInfo["value"][i] for i in indexes]
+                # figure out how much flow a group has
+                i = labelNames.index(groupedLabels[timestep][group])
+                indexes = [index for index,x in enumerate(diagramInfo["target"]) if x == i]
+                values = [diagramInfo["value"][i] for i in indexes]
                 availableFlow = sum(values)
+
+                
 
             if(len(flowsPerGroup) != 0):
                 numberOfFlows = flowsPerGroup.pop(0)
@@ -145,31 +151,44 @@ def generatePaths(groupedLabels, complexityLevel):
 
             # generate random flows
 
-            # minimum number of flow units per flow is 5 to make sure that the number of paths shown matches the number of paths
+            # minimum number of flow units per flow is 10 to make sure that the number of paths shown matches the number of paths
             flows = [10] * numberOfFlows
             availableFlow -= 10*numberOfFlows
+
             for temp in range(numberOfFlows):
                 if(temp == numberOfFlows-1):
                     flow = availableFlow
                 else: 
                     flow = round(random.randint(availableFlow//4, availableFlow)/10)*10
                     
-                # randomIndex = random.randint(0, len(flows) - 1)
-                # flows[randomIndex] += flow
                 flows[temp] += flow
                 availableFlow -= flow
 
-            print(flows)
+            print("Flow Amount Per Group", flows)
+
+            # Fill the rest of the flow array with 0's 
 
 
 
+    #         targets = []
+    #         for path in flows:
+    #             diagramInfo["source"].append(labelNames.index(groupedLabels[timestep][group]))
+    #             diagramInfo["value"].append(path)
 
+    #             # Make sure that each one of the groups in the next timestep get at least one flow going to it from the previous timestep
 
+    #             randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
 
-                
+    #             while(groupedLabels[timestep + 1][randomIndex] in targets):
+    #                 randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
 
+    #             targets.append(groupedLabels[timestep + 1][randomIndex])
+    #             diagramInfo["target"].append(labelNames.index(groupedLabels[timestep + 1][randomIndex]))
 
-               
+    #         print(targets)
+
+            
+    # print(diagramInfo, "\n\n\n")
 
 
 
@@ -185,7 +204,7 @@ def generatePaths(groupedLabels, complexityLevel):
     )])
 
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
-    # fig.show()
+    fig.show()
 
    
     # fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
@@ -200,13 +219,15 @@ def generateSetSum(n, sumVal, maxVal, mode):
     temp = [1] * n
 
     for num in range(sumVal - n):
-        # generatinng a random index to add to
+        # generating a random index to add to
         index = random.randint(0, len(temp) - 1)
 
         # if that index is greater than the max
         if(maxVal != -1 and mode == 1):
+            # print("Generating Index", temp, maxVal, sumVal)
             while(temp[index] + 1 > maxVal):
                 index = random.randint(0, len(temp) - 1)
+                
 
         temp[index] += 1
     
@@ -241,6 +262,6 @@ def generateMetaData(diagramMetadata):
     
 
 
-lowComplexity()
+# lowComplexity()
 # mediumComplexity()
-# highComplexity()
+highComplexity()
