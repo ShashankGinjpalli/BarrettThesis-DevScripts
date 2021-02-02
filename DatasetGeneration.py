@@ -25,8 +25,6 @@ def lowComplexity():
 
     # returns the labels in a grouped format
     groupedLabels = labelGen(timeStepGroups)
-  
-
     generatePaths(groupedLabels,"low")
 
 
@@ -44,7 +42,6 @@ def mediumComplexity():
     generatePaths(groupedLabels, "med")
 
     
-
 
 def highComplexity():
     labelNames.clear()
@@ -120,7 +117,6 @@ def generatePaths(groupedLabels, complexityLevel):
     print(flowsCount)
 
    
-
     for timeStep in range(len(groupedLabels) - 1):
         timeStepFlows = flowsCount.pop(0)
         print("\n\n")
@@ -133,7 +129,44 @@ def generatePaths(groupedLabels, complexityLevel):
         
             # checking if the label is the starting
             if(groupedLabels[timeStep][group] not in diagramInfo['target']):
-                flowLeft = 100
+                availableFlow = 100
+
+            else: 
+                # figure out how much flow a business has
+                i = labelNames.index(groupedLabels[timeStep][group])
+                indexes = [j for j in diagramInfo["target"][j] if j == i]
+                values = [dictionaryInfo["value"][i] for i in indexes]
+                availableFlow = sum(values)
+
+            if(len(flowsPerGroup) != 0):
+                numberOfFlows = flowsPerGroup.pop(0)
+            else: 
+                numberOfFlows = 0
+
+            # generate random flows
+
+            # minimum number of flow units per flow is 5 to make sure that the number of paths shown matches the number of paths
+            flows = [5] * numberOfFlows
+            availableFlow -= 5*numberOfFlows
+            for temp in range(numberOfFlows):
+                if(temp == numberOfFlows-1):
+                    flow = availableFlow
+                else: 
+                    flow = random.randint(availableFlow//4, availableFlow)
+                    
+                # randomIndex = random.randint(0, len(flows) - 1)
+                # flows[randomIndex] += flow
+                flows[temp] += flow
+                availableFlow -= flow
+
+            print(flows)
+
+
+
+
+
+
+                
 
 
                
