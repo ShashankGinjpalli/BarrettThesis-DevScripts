@@ -19,9 +19,9 @@ def lowComplexity():
     numTimeSteps = random.randint(3,3)
     timeStepGroups = []
     
-    # generate numbers beween 2 and 4 for the number of indexes for each time step
+    # generate numbers beween 2 and 3 for the number of indexes for each time step
     for i in range(numTimeSteps):
-        timeStepGroups.append(random.randint(3,4))
+        timeStepGroups.append(random.randint(2,3))
 
     # returns the labels in a grouped format
     groupedLabels = labelGen(timeStepGroups)
@@ -133,7 +133,7 @@ def generatePaths(groupedLabels, complexityLevel):
         
             # checking if the label is the starting
             if(labelNames.index(groupedLabels[timestep][group]) not in diagramInfo["target"]):
-                availableFlow = 200
+                availableFlow = 100
 
             else: 
                 # figure out how much flow a group has
@@ -152,17 +152,35 @@ def generatePaths(groupedLabels, complexityLevel):
             # generate random flows
 
             # minimum number of flow units per flow is 10 to make sure that the number of paths shown matches the number of paths
-            flows = [10] * numberOfFlows
-            availableFlow -= 10*numberOfFlows
+
+
+            print("\n\nGroup: ", groupedLabels[timestep][group])
+            print("Starting Availible Flow", availableFlow)
+
+            # TODO fill out starting flows as 10% of the availible
+
+            flowFraction = round(availableFlow/10)
+            if(flowFraction == 0):
+                flowFraction = 1
+            flows = [flowFraction] * numberOfFlows
+
+            print("Starting Flows", flows)
+            availableFlow -= flowFraction*numberOfFlows
 
             for temp in range(numberOfFlows):
+                if(availableFlow <= 0):
+                    break
+
                 if(temp == numberOfFlows-1):
                     flow = availableFlow
                 else: 
-                    flow = round(random.randint(availableFlow//4, availableFlow)/10)*10
+                    
+                    flow = round(random.randint(availableFlow//4, availableFlow))
                     
                 flows[temp] += flow
                 availableFlow -= flow
+
+                print("flow, amount left: ", (flow, availableFlow))
 
             print("Flow Amount Per Group", flows)
 
@@ -170,22 +188,21 @@ def generatePaths(groupedLabels, complexityLevel):
 
 
 
-    #         targets = []
-    #         for path in flows:
-    #             diagramInfo["source"].append(labelNames.index(groupedLabels[timestep][group]))
-    #             diagramInfo["value"].append(path)
+            targets = []
+            for path in flows:
+                diagramInfo["source"].append(labelNames.index(groupedLabels[timestep][group]))
+                diagramInfo["value"].append(path)
 
-    #             # Make sure that each one of the groups in the next timestep get at least one flow going to it from the previous timestep
+                # Make sure that each one of the groups in the next timestep get at least one flow going to it from the previous timestep
 
-    #             randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
+                randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
 
-    #             while(groupedLabels[timestep + 1][randomIndex] in targets):
-    #                 randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
+                while(groupedLabels[timestep + 1][randomIndex] in targets):
+                    randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
 
-    #             targets.append(groupedLabels[timestep + 1][randomIndex])
-    #             diagramInfo["target"].append(labelNames.index(groupedLabels[timestep + 1][randomIndex]))
+                targets.append(groupedLabels[timestep + 1][randomIndex])
+                diagramInfo["target"].append(labelNames.index(groupedLabels[timestep + 1][randomIndex]))
 
-    #         print(targets)
 
             
     # print(diagramInfo, "\n\n\n")
@@ -262,6 +279,6 @@ def generateMetaData(diagramMetadata):
     
 
 
-# lowComplexity()
-# mediumComplexity()
+lowComplexity()
+mediumComplexity()
 highComplexity()
