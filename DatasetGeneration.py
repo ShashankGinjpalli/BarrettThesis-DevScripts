@@ -107,9 +107,9 @@ def generatePaths(groupedLabels, complexityLevel):
         nextTimeStepLength = len(groupedLabels[timestep + 1])
         currentTimeStepLength = len(groupedLabels[timestep])
 
-        flowNumber = random.randint(currentTimeStepLength, nextTimeStepLength*currentTimeStepLength)
+        flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
         while(flowNumber in flowsCount and len(flowsCount) != (nextTimeStepLength*currentTimeStepLength) - nextTimeStepLength): 
-            flowNumber = random.randint(currentTimeStepLength, nextTimeStepLength*currentTimeStepLength)
+            flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
             # print("Regenerating Flows")
 
         
@@ -127,6 +127,14 @@ def generatePaths(groupedLabels, complexityLevel):
         print((len(groupedLabels[timestep]), len(groupedLabels[timestep + 1]), timestep, groupedLabels[timestep], groupedLabels[timestep + 1]))
         flowsPerGroup = generateSetSum(len(groupedLabels[timestep]), timeStepFlows, len(groupedLabels[timestep + 1]), 1)
         print("Number of Flows Per Group", flowsPerGroup)
+
+
+        # make a tracker dictionary that keeps track of the number of times a group gets flow in the next timestep
+        # we want every group to have at least 
+        tracker = {}
+        for groupName in groupedLabels[timestep + 1]:
+            tracker[groupName] = 0
+
 
         for group in range(len(groupedLabels[timestep])):
 
@@ -173,35 +181,48 @@ def generatePaths(groupedLabels, complexityLevel):
 
                 if(temp == numberOfFlows-1):
                     flow = availableFlow
-                else: 
-                    
+                else:   
                     flow = round(random.randint(availableFlow//4, availableFlow))
                     
                 flows[temp] += flow
                 availableFlow -= flow
 
                 print("flow, amount left: ", (flow, availableFlow))
-
             print("Flow Amount Per Group", flows)
-
-            # Fill the rest of the flow array with 0's 
 
 
 
             targets = []
+            groupsVisited = []
             for path in flows:
                 diagramInfo["source"].append(labelNames.index(groupedLabels[timestep][group]))
                 diagramInfo["value"].append(path)
 
                 # Make sure that each one of the groups in the next timestep get at least one flow going to it from the previous timestep
+                
+                for target in tracker.keys():
 
-                randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
+                    if(0 in list(tracker.values())):
+                        if(tracker[target] == 0):
+                            targets.append(target)
+                    # only open up complete randomness when every single flow in the next timestep has a flow going to it
+                    else:
+                        targets.append(target)
+                
+                # Use the Tracker Dictionary to figure out which group to send the flow to 
+                print("Availible Targets: ",targets )
+                randomIndex = random.randint(0,len(targets) - 1)
 
-                while(groupedLabels[timestep + 1][randomIndex] in targets):
-                    randomIndex = random.randint(0,len(groupedLabels[timestep + 1]) - 1)
+                # make sure that the same group doesnt go to the same target group more than once
+                while(targets[randomIndex] in groupsVisited):
+                    randomIndex = random.randint(0,len(targets) - 1)
 
-                targets.append(groupedLabels[timestep + 1][randomIndex])
-                diagramInfo["target"].append(labelNames.index(groupedLabels[timestep + 1][randomIndex]))
+                tracker[targets[randomIndex]] += 1
+                print("targetChosen", targets[randomIndex])
+                groupsVisited.append(targets[randomIndex])
+                diagramInfo["target"].append(labelNames.index(targets[randomIndex]))
+                targets.clear()
+                
 
 
             
@@ -221,12 +242,12 @@ def generatePaths(groupedLabels, complexityLevel):
     )])
 
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
-    fig.show()
+    # fig.show()
 
    
-    # fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
+    fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
 
-    # generateMetaData(diagramInfo)
+    generateMetaData(diagramInfo)
  
 
 # mode 1 is generating for the flows 
@@ -268,17 +289,17 @@ def generateMetaData(diagramMetadata):
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-# while imageCount <= 48:
-#     lowComplexity()
-#     imageCount += 1
-#     mediumComplexity()
-#     imageCount += 1
-#     highComplexity()
-#     imageCount += 1
+while imageCount <= 48:
+    lowComplexity()
+    imageCount += 1
+    mediumComplexity()
+    imageCount += 1
+    highComplexity()
+    imageCount += 1
 
     
 
 
-lowComplexity()
-mediumComplexity()
-highComplexity()
+# lowComplexity()
+# mediumComplexity()
+# highComplexity()
