@@ -174,7 +174,7 @@ def generatePaths(groupedLabels, complexityLevel):
             flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
 
            
-            while(max(flows) in flowValuesUsed and max(flows) != 100):
+            while(max(flows) in flowValuesUsed and max(flows) != 100 and len(flows) != 1):
                 flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
 
             flowValuesUsed.append(max(flows))
@@ -230,12 +230,11 @@ def generatePaths(groupedLabels, complexityLevel):
     )])
 
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
-    fig.show()
+    # fig.show()
 
    
-    # fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
-
-    # generateMetaData(diagramInfo)
+    fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
+    generateMetaData(diagramInfo)
  
 
 # used to generate the number of flows in each of the timesteps
@@ -299,17 +298,17 @@ def generateMetaData(diagramMetadata):
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-# while imageCount <= 48:
-#     lowComplexity()
-#     imageCount += 1
-#     mediumComplexity()
-#     imageCount += 1
-#     highComplexity()
-#     imageCount += 1
+while imageCount <= 48:
+    lowComplexity()
+    imageCount += 1
+    mediumComplexity()
+    imageCount += 1
+    highComplexity()
+    imageCount += 1
 
     
 
 
-lowComplexity()
-mediumComplexity()
-highComplexity()
+# lowComplexity()
+# mediumComplexity()
+# highComplexity()
