@@ -49,7 +49,6 @@ def highComplexity():
     numTimeSteps = random.randint(5,8)
     timeStepGroups = []
     
-
     for i in range(numTimeSteps):
         timeStepGroups.append(random.randint(4,5))
 
@@ -101,6 +100,7 @@ def generatePaths(groupedLabels, complexityLevel):
 
     # print(groupedLabels)
     flowsCount = []
+    flowValuesUsed = []
     
     # figuring out how many flows should be between timesteps
     for timestep in range(len(groupedLabels) - 1):
@@ -165,33 +165,20 @@ def generatePaths(groupedLabels, complexityLevel):
             print("\n\nGroup: ", groupedLabels[timestep][group])
             print("Starting Availible Flow", availableFlow)
 
-            # TODO fill out starting flows as 10% of the availible
+            
 
             flowFraction = round(availableFlow/10)
             if(flowFraction == 0):
                 flowFraction = 1
-            flows = [flowFraction] * numberOfFlows
 
-            print("Starting Flows", flows)
-            availableFlow -= flowFraction*numberOfFlows
+            flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
 
-            for temp in range(numberOfFlows):
-                if(availableFlow <= 0):
-                    break
+           
+            while(max(flows) in flowValuesUsed and max(flows) != 100):
+                flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
 
-                if(temp == numberOfFlows-1):
-                    flow = availableFlow
-                else:   
-                    flow = round(random.randint(availableFlow//4, availableFlow))
-                    
-                flows[temp] += flow
-                availableFlow -= flow
-
-                print("flow, amount left: ", (flow, availableFlow))
-            print("Flow Amount Per Group", flows)
-
-
-
+            flowValuesUsed.append(max(flows))
+                
             targets = []
             groupsVisited = []
             for path in flows:
@@ -226,7 +213,8 @@ def generatePaths(groupedLabels, complexityLevel):
 
 
             
-    # print(diagramInfo, "\n\n\n")
+    print(diagramInfo, "\n\n\n")
+    print(max(diagramInfo['value']), diagramInfo['value'].index(max(diagramInfo['value'])))
 
 
 
@@ -242,13 +230,36 @@ def generatePaths(groupedLabels, complexityLevel):
     )])
 
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
-    # fig.show()
+    fig.show()
 
    
-    fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
+    # fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
 
-    generateMetaData(diagramInfo)
+    # generateMetaData(diagramInfo)
  
+
+# used to generate the number of flows in each of the timesteps
+def generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows): 
+    flows = [flowFraction] * numberOfFlows
+
+    print("Starting Flows", flows)
+    availableFlow -= flowFraction*numberOfFlows
+
+    for temp in range(numberOfFlows):
+        if(availableFlow <= 0):
+                    break
+
+        if(temp == numberOfFlows-1):
+            flow = availableFlow
+        else:   
+            flow = round(random.randint(availableFlow//4, availableFlow))
+    
+        flows[temp] += flow
+        availableFlow -= flow
+
+        print("flow, amount left: ", (flow, availableFlow))
+    print("Flow Amount Per Group", flows)
+    return flows
 
 # mode 1 is generating for the flows 
 # mode 2 
@@ -266,7 +277,6 @@ def generateSetSum(n, sumVal, maxVal, mode):
             while(temp[index] + 1 > maxVal):
                 index = random.randint(0, len(temp) - 1)
                 
-
         temp[index] += 1
     
     return temp
@@ -289,17 +299,17 @@ def generateMetaData(diagramMetadata):
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-while imageCount <= 48:
-    lowComplexity()
-    imageCount += 1
-    mediumComplexity()
-    imageCount += 1
-    highComplexity()
-    imageCount += 1
+# while imageCount <= 48:
+#     lowComplexity()
+#     imageCount += 1
+#     mediumComplexity()
+#     imageCount += 1
+#     highComplexity()
+#     imageCount += 1
 
     
 
 
-# lowComplexity()
-# mediumComplexity()
-# highComplexity()
+lowComplexity()
+mediumComplexity()
+highComplexity()
