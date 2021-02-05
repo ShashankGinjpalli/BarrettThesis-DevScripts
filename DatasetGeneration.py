@@ -31,7 +31,7 @@ def lowComplexity():
 
 def mediumComplexity():
     labelNames.clear()
-    # 3 - 5
+    # 4 - 5
     numTimeSteps = random.randint(4,5)
     timeStepGroups = []
     
@@ -46,7 +46,7 @@ def mediumComplexity():
 def highComplexity():
     labelNames.clear()
     # 5 - 8
-    numTimeSteps = random.randint(5,8)
+    numTimeSteps = random.randint(5,6)
     timeStepGroups = []
     
     for i in range(numTimeSteps):
@@ -71,20 +71,6 @@ def labelGen(timeStepGroups):
             groupsPerTimeStep.append(letter + str(count + 1))
         groupedLabels.append(groupsPerTimeStep)
 
-    # LABELS INDEXED BY NUMBER
-    
-    # for i in range(len(timeStepGroups)):
-    #     labelLetters = labelHeaders[0:timeStepGroups[i]]
-    #     # where each label goes for each of the time steps
-    #     timeStepLabels = []
-    #     for letter in labelLetters:
-    #         # makes a flattened list of label names
-    #         labelNames.append(letter + str(i + 1))
-    #         timeStepLabels.append(letter + str(i + 1))
-
-    #     groupedLabels.append(timeStepLabels)
-    # returns a nested list of label names
-
     return groupedLabels
 
 
@@ -98,7 +84,6 @@ def generatePaths(groupedLabels, complexityLevel):
 
     print("\n\n",complexityLevel)
 
-    # print(groupedLabels)
     flowsCount = []
     flowValuesUsed = []
     
@@ -110,9 +95,6 @@ def generatePaths(groupedLabels, complexityLevel):
         flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
         while(flowNumber in flowsCount and len(flowsCount) != (nextTimeStepLength*currentTimeStepLength) - nextTimeStepLength): 
             flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
-            # print("Regenerating Flows")
-
-        
 
         flowsCount.append(flowNumber)
 
@@ -120,6 +102,7 @@ def generatePaths(groupedLabels, complexityLevel):
     print(flowsCount)
 
    
+    # Generating the Flow Amount for Each group in the diagram
     for timestep in range(len(groupedLabels) - 1):
         timeStepFlows = flowsCount.pop(0)
         print("\n\n")
@@ -138,10 +121,14 @@ def generatePaths(groupedLabels, complexityLevel):
 
         for group in range(len(groupedLabels[timestep])):
 
-        
             # checking if the label is the starting
             if(labelNames.index(groupedLabels[timestep][group]) not in diagramInfo["target"]):
-                availableFlow = 100
+                if(complexityLevel == 'easy'):
+                    availableFlow = 30
+                elif (complexityLevel == 'med'):
+                    availableFlow = 50
+                else:
+                    availableFlow = 80
 
             else: 
                 # figure out how much flow a group has
@@ -157,9 +144,6 @@ def generatePaths(groupedLabels, complexityLevel):
             else: 
                 numberOfFlows = 0
 
-            # generate random flows
-
-            # minimum number of flow units per flow is 10 to make sure that the number of paths shown matches the number of paths
 
 
             print("\n\nGroup: ", groupedLabels[timestep][group])
@@ -167,15 +151,15 @@ def generatePaths(groupedLabels, complexityLevel):
 
             
 
-            flowFraction = round(availableFlow/10)
-            if(flowFraction == 0):
-                flowFraction = 1
+            # flowFraction = round(availableFlow/10)
+            # if(flowFraction == 0):
+            #     flowFraction = 1
 
-            flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
+            flows = generateFlowPerGroup(flowValuesUsed, availableFlow, numberOfFlows)
 
-           
-            while(max(flows) in flowValuesUsed and max(flows) != 100 and len(flows) != 1):
-                flows = generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows)
+            retry = 0
+            while((max(flows) in flowValuesUsed and max(flows) != 100 and len(flows) != 1  and retry <= 50)):
+                flows = generateFlowPerGroup(flowValuesUsed, availableFlow, numberOfFlows)
 
             flowValuesUsed.append(max(flows))
                 
@@ -233,16 +217,17 @@ def generatePaths(groupedLabels, complexityLevel):
     # fig.show()
 
    
-    fig.write_image('Data/static/Diagram'+str(imageCount)+'.svg')
+    fig.write_image('Data/static/Diagram'+str(imageCount)+'.jpg' , width=1920, height=1080, scale=1)
     generateMetaData(diagramInfo)
- 
+
 
 # used to generate the number of flows in each of the timesteps
-def generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows): 
-    flows = [flowFraction] * numberOfFlows
+def generateFlowPerGroup(flowValuesUsed, availableFlow, numberOfFlows): 
+    flows = [0] * numberOfFlows
 
-    print("Starting Flows", flows)
-    availableFlow -= flowFraction*numberOfFlows
+    # print("Starting Flows", flows)
+    # availableFlow -= flowFraction*numberOfFlows
+    flowStorage = availableFlow
 
     for temp in range(numberOfFlows):
         if(availableFlow <= 0):
@@ -250,13 +235,18 @@ def generateFlowPerGroup(flowFraction, availableFlow, numberOfFlows):
 
         if(temp == numberOfFlows-1):
             flow = availableFlow
-        else:   
-            flow = round(random.randint(availableFlow//4, availableFlow))
+        else:
+            rangeSet = range(availableFlow//4, availableFlow//2 + 1)
+            if(set(rangeSet).issubset(flowValuesUsed)):
+                flow = round(random.randint((availableFlow*2)//7, (availableFlow * 6)//7))
+            else:
+                flow = round(random.randint(availableFlow//4, (availableFlow)//2))
     
         flows[temp] += flow
         availableFlow -= flow
 
-        print("flow, amount left: ", (flow, availableFlow))
+        # print("flow, amount left: ", (flow, availableFlow))
+
     print("Flow Amount Per Group", flows)
     return flows
 
