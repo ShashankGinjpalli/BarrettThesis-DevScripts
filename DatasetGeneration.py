@@ -25,7 +25,7 @@ def lowComplexity():
 
     # returns the labels in a grouped format
     groupedLabels = labelGen(timeStepGroups)
-    generatePaths(groupedLabels,"low")
+    generatePaths(groupedLabels,"low", numTimeSteps, sum(timeStepGroups))
 
 
 
@@ -39,7 +39,7 @@ def mediumComplexity():
     for i in range(numTimeSteps):
         timeStepGroups.append(random.randint(3,5))
     groupedLabels = labelGen(timeStepGroups)
-    generatePaths(groupedLabels, "med")
+    generatePaths(groupedLabels, "med",  numTimeSteps, sum(timeStepGroups))
 
     
 
@@ -53,7 +53,7 @@ def highComplexity():
         timeStepGroups.append(random.randint(4,5))
 
     groupedLabels = labelGen(timeStepGroups)
-    generatePaths(groupedLabels,"high")
+    generatePaths(groupedLabels,"high",  numTimeSteps, sum(timeStepGroups))
     
 
 # generates the labels for each of the time steps
@@ -74,7 +74,7 @@ def labelGen(timeStepGroups):
     return groupedLabels
 
 
-def generatePaths(groupedLabels, complexityLevel):
+def generatePaths(groupedLabels, complexityLevel, numberOfTimesteps, numberOfGroups):
 
     diagramInfo = {
         "source": [],
@@ -100,6 +100,8 @@ def generatePaths(groupedLabels, complexityLevel):
 
     print(groupedLabels)
     print(flowsCount)
+
+    flowCountStorage = flowsCount.copy()
 
    
     # Generating the Flow Amount for Each group in the diagram
@@ -214,11 +216,12 @@ def generatePaths(groupedLabels, complexityLevel):
     )])
 
     fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
-    # fig.show()
+    fig.write_image('Data/static/Diagram'+str(imageCount)+'.jpg' , width=1920, height=1080, scale=1)
+    generateMetaData(diagramInfo, numberOfTimesteps, numberOfGroups, sum(flowCountStorage))
+    fig.show()
 
    
-    fig.write_image('Data/static/Diagram'+str(imageCount)+'.jpg' , width=1920, height=1080, scale=1)
-    generateMetaData(diagramInfo)
+    
 
 
 # used to generate the number of flows in each of the timesteps
@@ -250,8 +253,7 @@ def generateFlowPerGroup(flowValuesUsed, availableFlow, numberOfFlows):
     print("Flow Amount Per Group", flows)
     return flows
 
-# mode 1 is generating for the flows 
-# mode 2 
+# figures out how many flows there should be leaving each group
 def generateSetSum(n, sumVal, maxVal, mode):
     # there should be a minimum of one flow per group
     temp = [1] * n
@@ -273,7 +275,7 @@ def generateSetSum(n, sumVal, maxVal, mode):
 
 
 
-def generateMetaData(diagramMetadata):
+def generateMetaData(diagramMetadata, numTimeSteps, numGroups, numFlows):
     tempSource = []
     for i in diagramMetadata['source']:
         tempSource.append(labelNames[i])
@@ -283,22 +285,38 @@ def generateMetaData(diagramMetadata):
 
     diagramMetadata['source'] = tempSource
     diagramMetadata['target'] = tempTarget
+    diagramMetadata['NumberOfTimeSteps'] = numTimeSteps
+    diagramMetadata['NumberOfGroups'] = numGroups
+    diagramMetadata['NumberOfFlows'] = numFlows
 
     with open('Data/metadata/image'+str(imageCount)+'_metadata.json','w') as outfile:
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-while imageCount <= 48:
-    lowComplexity()
-    imageCount += 1
-    mediumComplexity()
-    imageCount += 1
-    highComplexity()
-    imageCount += 1
 
-    
+userInput = ""
+while(userInput != 'q' and imageCount <= 48):
+    userInput = input("Enter Choice(e--easy, m--medium, h--hard, d--delete, n--next, q--quit)")
 
+    if(userInput == 'e'):
+        lowComplexity()
+    elif(userInput == 'm'):
+        mediumComplexity()
+    elif(userInput == 'h'):
+        highComplexity()
+    elif(userInput == 'd'):
+        os.system("rm Data/static/Diagram"+str(imageCount)+".jpg")
+        os.system("rm Data/metadata/image"+str(imageCount)+"_metadata.json")
+    elif(userInput == 'n'):
+        imageCount += 1
+    elif(userInput == 'q'):
+        break
+    else:
+        print("Invalid Input")
 
 # lowComplexity()
+# imageCount+=1
 # mediumComplexity()
+# imageCount+=1
 # highComplexity()
+# imageCount +=1
