@@ -1,0 +1,38 @@
+{
+    "NumberOfFlows": 9,
+    "NumberOfGroups": 7,
+    "NumberOfTimeSteps": 3,
+    "source": [
+        "A1",
+        "A2",
+        "A2",
+        "B1",
+        "B1",
+        "B1",
+        "B2",
+        "B2",
+        "B2"
+    ],
+    "target": [
+        "B2",
+        "B1",
+        "B2",
+        "C1",
+        "C2",
+        "C3",
+        "C1",
+        "C2",
+        "C3"
+    ],
+    "value": [
+        80,
+        40,
+        40,
+        18,
+        9,
+        13,
+        60,
+        27,
+        33
+    ]
+}
