@@ -200,7 +200,7 @@ def generatePaths(groupedLabels, complexityLevel, numberOfTimesteps, numberOfGro
 
             
     print(diagramInfo, "\n\n\n")
-    print(max(diagramInfo['value']), diagramInfo['value'].index(max(diagramInfo['value'])))
+    
 
 
 
@@ -213,10 +213,10 @@ def generatePaths(groupedLabels, complexityLevel, numberOfTimesteps, numberOfGro
       color = "#574ae2"
     ),
     link = diagramInfo,
-    textfont=dict(size = 18)
+    textfont=dict(size = 28)
     )])
 
-    fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=12)
+    # fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=12)
     fig.write_image('Data/static/Diagram'+str(imageCount)+'.jpg' , width=1920, height=1080, scale=1)
     generateMetaData(diagramInfo, numberOfTimesteps, numberOfGroups, sum(flowCountStorage))
     fig.show()
