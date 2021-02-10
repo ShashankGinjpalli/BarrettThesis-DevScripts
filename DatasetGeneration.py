@@ -212,10 +212,11 @@ def generatePaths(groupedLabels, complexityLevel, numberOfTimesteps, numberOfGro
       label = labelNames,
       color = "#574ae2"
     ),
-    link = diagramInfo
+    link = diagramInfo,
+    textfont=dict(size = 18)
     )])
 
-    fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=10)
+    fig.update_layout(title_text="Sankey Diagram " + str(imageCount), font_size=12)
     fig.write_image('Data/static/Diagram'+str(imageCount)+'.jpg' , width=1920, height=1080, scale=1)
     generateMetaData(diagramInfo, numberOfTimesteps, numberOfGroups, sum(flowCountStorage))
     fig.show()
@@ -294,29 +295,29 @@ def generateMetaData(diagramMetadata, numTimeSteps, numGroups, numFlows):
 
 
 
-userInput = ""
-while(userInput != 'q' and imageCount <= 48):
-    userInput = input("Enter Choice(e--easy, m--medium, h--hard, d--delete, n--next, q--quit)")
+# userInput = ""
+# while(userInput != 'q' and imageCount <= 48):
+#     userInput = input("Enter Choice(e--easy, m--medium, h--hard, d--delete, n--next, q--quit)")
 
-    if(userInput == 'e'):
-        lowComplexity()
-    elif(userInput == 'm'):
-        mediumComplexity()
-    elif(userInput == 'h'):
-        highComplexity()
-    elif(userInput == 'd'):
-        os.system("rm Data/static/Diagram"+str(imageCount)+".jpg")
-        os.system("rm Data/metadata/image"+str(imageCount)+"_metadata.json")
-    elif(userInput == 'n'):
-        imageCount += 1
-    elif(userInput == 'q'):
-        break
-    else:
-        print("Invalid Input")
+#     if(userInput == 'e'):
+#         lowComplexity()
+#     elif(userInput == 'm'):
+#         mediumComplexity()
+#     elif(userInput == 'h'):
+#         highComplexity()
+#     elif(userInput == 'd'):
+#         os.system("rm Data/static/Diagram"+str(imageCount)+".jpg")
+#         os.system("rm Data/metadata/image"+str(imageCount)+"_metadata.json")
+#     elif(userInput == 'n'):
+#         imageCount += 1
+#     elif(userInput == 'q'):
+#         break
+#     else:
+#         print("Invalid Input")
 
-# lowComplexity()
-# imageCount+=1
-# mediumComplexity()
-# imageCount+=1
-# highComplexity()
-# imageCount +=1
+lowComplexity()
+imageCount+=1
+mediumComplexity()
+imageCount+=1
+highComplexity()
+imageCount +=1
