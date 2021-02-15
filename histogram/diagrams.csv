@@ -1,0 +1,49 @@
+Diagram Number,Difficulty,Group with the largest flow units,Largest Flow in the Diagram,Between which 2 timesteps have the most flow ,Which Group Has the most Flow Connecting to It ,Number of Timesteps,Number of Flows,Number of crossover flows,Number of Groups,Complexity Level
+Diagram 1,Easy,C2,B2 -> C2,A -> B,B2,3,7,0,7,17
+Diagram 2,Medium,D4,B2 -> C4,A->B,C1,4,34,98,17,153
+Diagram 3,Hard,C2,D1 -> E1,A -> B,B1,5,63,226,24,318
+Diagram 4,Medium,D1,C2 -> D4,B -> C,C1,4,40,142,17,203
+Diagram 5,Medium,E1,D4->E1,C -> D,B3,5,42,102,21,170
+Diagram 6,Hard,E1,D2->E4,B->C,B2,5,46,116,22,189
+Diagram 7,Easy,C2,B2->C2,A->B,B3,3,15,24,9,51
+Diagram 8,Medium,C1,C1->D2,C -> D,C4,4,23,28,17,72
+Diagram 9,Hard,F2,E1->F4,C -> D,C4,6,56,136,26,224
+Diagram 10,Medium,E3,D2->E1,C->D,B2,5,28,34,19,86
+Diagram 11,Medium,E1,B2->C3,C->D,D3,5,27,34,18,84
+Diagram 12,Hard,D2,D2->E3,A->B,B5,5,45,116,22,188
+Diagram 13,Easy,C1,B3->C1,A->B,B2,3,9,4,9,25
+Diagram 14,Medium,D3,C1->D3,A->B,B3,4,37,114,16,171
+Diagram 15,Hard,C2,D1->E1,B->C,C2,6,55,176,26,263
+Diagram 16,Easy,C1,B3->C1,A->B,B3,3,7,0,8,18
+Diagram 17,Medium,D4,B2 -> C2,A->B,D4,5,39,54,21,119
+Diagram 18,Hard,F5,E2 -> F5,C->D,C1,6,60,126,29,221
+Diagram 19,Medium,D1,C1 -> D1,A->B,B4,5,55,222,21,303
+Diagram 20,Medium,B3,B3->C4,C->D,B2,4,34,82,17,137
+Diagram 21,Hard,F4,E4->F4,D->E,C4,6,58,196,27,287
+Diagram 22,Easy,C1,B2->C1,A->B,B3,3,15,16,9,43
+Diagram 23,Medium,B3,B3->C2,B->C,B3,4,21,40,17,82
+Diagram 24,Hard,E4,D3->E4,B->C,D1,5,42,88,23,158
+Diagram 25,Easy,C2,B1 -> C2,A->B,B1,3,10,5,8,26
+Diagram 26,Medium,D3,C3->D3,A->B,B4,4,36,156,18,214
+Diagram 27,Hard,F1,B2->C2,D->E,D1,6,50,148,25,229
+Diagram 28,Easy,B2,A1->B1,B -> C,B2,3,13,18,8,42
+Diagram 29,Medium,B3,D2->E1,B->C,B3,5,35,50,20,110
+Diagram 30,Hard,C3,D1->E5,E -> F,C1,6,56,168,28,258
+Diagram 31,Easy,B1,A2->B1,B->C,B1,3,10,10,7,30
+Diagram 32,Medium,B2,C5->D4,B->C,B2,5,33,64,19,121
+Diagram 33,Hard,E1,D4->E1,A->B,B3,5,45,152,22,224
+Diagram 34,Medium,D1,C1->D1,B->C,B4,5,50,130,23,208
+Diagram 35,Medium,D4,C5->D4,B->C,C4,4,36,74,19,133
+Diagram 36,Hard,E1,D3->E1,E->F,C4,6,58,158,28,250
+Diagram 37,Easy,C3,B3->C3,A->B,B1,3,11,6,8,28
+Diagram 38,Medium,C2,B3->C2,D->E,D4,5,67,228,23,323
+Diagram 39,Hard,D2,C3->D2,D->E,E2,6,49,92,27,174
+Diagram 40,Hard,D2,E1 -> F5,D-> E,D2,6,57,156,26,245
+Diagram 41,Medium,C1,B2->C1,C -> D,C1,5,50,132,19,206
+Diagram 42,Hard,B5,E3->F4,C -> D,C3,6,75,236,29,346
+Diagram 43,Easy,B2,B2 -> C2,B->C,B2,3,7,2,6,18
+Diagram 44,Medium,C1,B3 -> C1,C->D,C1,4,25,42,14,85
+Diagram 45,Hard,E1,D3 -> E1,B -> C,C1,5,63,214,24,306
+Diagram 46,Medium,E2,D5->E2,C->D,B3,5,22,8,20,55
+Diagram 47,Medium,C2,B1 -> C1,A->B,C1,4,34,80,18,136
+Diagram 48,Hard,C1,D2 -> E3,E->F,C4,6,59,154,27,246

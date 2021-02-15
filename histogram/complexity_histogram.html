@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+ <html>
+    <head>
+        <title>Joins with D3</title>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+        <style>
+            body {
+                padding: 50px;
+            }
+            svg {
+                border:1px solid black;
+                width:1002px;
+                height:400px;
+            }
+            rect {
+                fill: lightpink;
+                stroke: black;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <svg></svg>
+    </body>
+    <script>
+        numberOfBins = 20;
+        
+        let svg = d3.select('svg');
+        let margin = {top:20, bottom: 30, right: 20, left: 30};
+        let width = svg.node().clientWidth - margin.left - margin.right;
+        let height = svg.node().clientHeight - margin.top - margin.bottom;
+        
+        let g = svg.append('g')
+                    .attr('transform',`translate(${margin.left}, ${margin.top})`);
+        
+        d3.csv('diagrams.csv').then(function(data) {
+            data.forEach( d => {
+                d.complexity = +d["Complexity Level"];
+            })
+            console.table(data);
+            let x = d3.scaleLinear()
+                        .domain([0, d3.max(data, d => d.complexity)])
+                        .range([0,width]);
+            let y = d3.scaleLinear()
+                        .range([height,0]);
+            let histogram = d3.histogram()
+                    .value(d => d.complexity)
+                    .domain(x.domain())
+                    .thresholds(x.ticks(numberOfBins));
+            let bins = histogram(data);
+            console.log(bins);
+            
+            y.domain([0, d3.max(bins, d => d.length)]);
+
+            g.append('g').call(d3.axisLeft(y));
+            g.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            let bars = g.selectAll('.rect')
+                        .data(bins)
+                        .join('rect')
+                        .attr('x',1)
+                        .attr('transform',d => `translate(${x(d.x0)}, ${y(d.length)})`)
+                        .attr('width', d => x(d.x1) - x(d.x0) - 1)
+                        .attr('height', d => height - y(d.length))
+                        
+
+
+                    //     svg3.selectAll('joinCircles')
+                    // .data(animateData)    
+                    // .join('circle')
+                    //     .attr('class','appendCircles')
+                    //     .attr('cx', (d,i) => width - 40 - i*40)
+                    //     .attr('cy', 50)
+                    //     .attr('r',10)
+                    //     .style('stroke','black')
+                    //     .style('fill','lightpink');
+
+        });
+    </script>
+</html>
