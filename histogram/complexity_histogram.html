@@ -24,7 +24,7 @@
         <svg></svg>
     </body>
     <script>
-        numberOfBins = 20;
+        // let numberOfBins = 10;
         
         let svg = d3.select('svg');
         let margin = {top:20, bottom: 30, right: 20, left: 30};
@@ -47,7 +47,7 @@
             let histogram = d3.histogram()
                     .value(d => d.complexity)
                     .domain(x.domain())
-                    .thresholds(x.ticks(numberOfBins));
+                    .thresholds(x.ticks(10));
             let bins = histogram(data);
             console.log(bins);
             
