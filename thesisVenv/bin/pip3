@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/shashankginjpalli/Documents/ASU/Barrett Thesis/Dev/thesisVenv/bin/python3" "$0" "$@"
+'''exec' "/Users/shashankginjpalli/Documents/ASU/Barrett Thesis/Dev/thesisVenv/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
