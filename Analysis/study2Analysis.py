@@ -54,12 +54,20 @@ mx = sortedRankings[len(sortedRankings) - 1][1]
 questionComplexity = sorted(questionComplexity, key = lambda x:x[1])
 # normalize rankings: 
 
-print(questionComplexity, "\n\n")
+# print(questionComplexity, "\n\n")
 for i in range(len(rankings)): 
     normalize = ((rankings[i][1] - mn)/(mx - mn))*100
     rankings[i][1] = normalize
 
 print(rankings, "\n")
+
+i = 0
+# Add to csv file so that i can use in ANCOVA
+with open("Analysis/study2ComplexityScore.csv",'w') as csvFile:
+    csvwriter = csv.writer(csvFile)
+    while i < len(rankings):
+        csvwriter.writerow([rankings[i][1]])
+        i += 1
 
 
 # Order According to the order in the charts in study 1
@@ -84,6 +92,13 @@ orderedRealComplexity = [(i[1] - 17)/(329)*100 for i in questionComplexity]
 # Graph the complexities from the 2 studies
 
 x = list(range(45))
-plt.plot(x,orderedVisualComplexity, color = 'blue')
-plt.plot(x,orderedRealComplexity, color = "red")
-plt.show()
+plt.xlabel("Diagram Number")
+plt.ylabel("Complexity Level")
+plt.plot(x,orderedVisualComplexity, color = 'blue', label="Visual Complexity Level")
+plt.plot(x,orderedRealComplexity, color = "red", label = "Real Complexity Level")
+plt.title("Real Complexity Vs Visual Complexity")
+plt.legend()
+
+# plt.show()
+
+plt.savefig('Analysis/study2.png')

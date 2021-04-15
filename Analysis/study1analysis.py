@@ -1,6 +1,7 @@
 import csv
 from matplotlib import pyplot as plt
 import numpy as np
+import statistics
 
 from sklearn.linear_model import LinearRegression
 
@@ -108,8 +109,44 @@ with open("Analysis/QualtricsDataStudy1Prepped.csv") as csvFile:
 
         linecount += 1
 
-print(results)
-# print(sum(participantAccuracy)/len(participantAccuracy))
+print(results, "\n\n")
+
+# #########################################
+#  Participant Accuracy Stats
+# ########################################
+
+print("Average Participant Accuracy: ",(sum(participantAccuracy)/len(participantAccuracy))/18*100)
+print("Min Participant Accuracy: ", (min(participantAccuracy))/18*100)
+print("Max Participant Accuracy: ", (max(participantAccuracy))/18*100)
+print("Median Participant Accuracy: ", statistics.median(participantAccuracy)/18*100)
+print("Standard Deviation", np.std(participantAccuracy)/18 * 100)
+
+# ##########################################
+# Calculate the Accuracy of Each Diagram
+# ##########################################
+
+diagramAccuracy = []
+
+with open('Analysis/study1questionAccuracy.csv','w') as csvFile:
+    csvWriter = csv.writer(csvFile)
+    
+
+    for key in results.keys():
+        tmp = results[key]
+        acc = sum(tmp['questionCorrect'])/sum(tmp['questionAppeared']) * 100
+
+        # acc = []
+        # for i in range(len(tmp['questionCorrect'])):
+        #     acc.append(tmp['questionCorrect'][i]/tmp['questionAppeared'][i] * 100)
+        diagramAccuracy.append(acc)
+        csvWriter.writerow([acc])
+        # print(key, " ", acc)
+
+
+
+
+
+
 
 # #####################################
 # Generate Graph Section
@@ -148,7 +185,7 @@ for i in range(len(answers)):
 
 # Using linear regression to plot the accuracy so that we can flatten alot of the spikes 
 xtrain = np.array(x).reshape((-1,1))
-print(xtrain)
+# print(xtrain)
 q1reg = LinearRegression().fit(xtrain,np.array(q1AccuracyTrain))
 q2reg = LinearRegression().fit(xtrain,np.array(q2AccuracyTrain))
 q3reg = LinearRegression().fit(xtrain,np.array(q3AccuracyTrain))
@@ -165,14 +202,27 @@ totalAccuracy = totalreg.predict(xtrain)
 
 
 plt.figure(figsize=(12,8)) 
-plt.plot(x, complexity, color='red', label = "Complexity of Dataset ")
+
+plt.plot(x, complexity, color='red', label = "Dataset Complexity")
 plt.plot(x, q1Accuracy, color='blue', label = "Largest # of Flows Between 2 Timesteps Accuracy")
 plt.plot(x, q2Accuracy, color='green', label = "Largest Group Accuracy")
 plt.plot(x, q3Accuracy, color='orange', label= "Largest Flow Accuracy")
 plt.plot(x, q4Accuracy, color='purple', label = "Largest Number of Connections Accuracy")
-plt.plot(x,totalAccuracy, color = 'brown', label = "Overall Question Accuracy")
+plt.plot(x,totalAccuracy, color = 'black', label = "Overall Question Accuracy")
 plt.legend()
-plt.show()
+
+
+
+plt.tick_params(labeltop=False, labelright=True)
+plt.xlabel("Diagram Number")
+plt.ylabel("Accuracy(%)/DatasetComplexity(%)")
+
+plt.title("Question Accuracy vs Diagram Complexity")
+
+# plt.show()
+
+
+plt.savefig('PostLinearRegressionTrends.png')
 
 
 
