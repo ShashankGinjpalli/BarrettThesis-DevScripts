@@ -8,27 +8,29 @@ import json
 
 imageCount = 1
 
+# Headings for each of the groups
 labelHeaders = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 labelHeaders = [char for char in labelHeaders]
 labelNames = []
 
 
+# Function to Generate the lower complexity groups
 def lowComplexity():
     labelNames.clear()
-    # 2 - 3 
+    # 3 timesteps in the smaller diagrams
     numTimeSteps = random.randint(3,3)
-    timeStepGroups = []
+    timeStepGroups = []  # Keeps track of the number of groups per timestep
     
     # generate numbers beween 2 and 3 for the number of indexes for each time step
     for i in range(numTimeSteps):
         timeStepGroups.append(random.randint(2,3))
 
     # returns the labels in a grouped format
-    groupedLabels = labelGen(timeStepGroups)
+    groupedLabels = labelGen(timeStepGroups) # formats all the label names into multiple lists [[A1, ... An], [B1, ..., Bn],...]
     generatePaths(groupedLabels,"low", numTimeSteps, sum(timeStepGroups))
 
 
-
+# Function to generate the medium complexity diagrams
 def mediumComplexity():
     labelNames.clear()
     # 4 - 5
@@ -42,7 +44,7 @@ def mediumComplexity():
     generatePaths(groupedLabels, "med",  numTimeSteps, sum(timeStepGroups))
 
     
-
+# function to generate the higher complexity diagrams
 def highComplexity():
     labelNames.clear()
     # 5 - 8
@@ -62,7 +64,7 @@ def labelGen(timeStepGroups):
     # LABELS INDEXED BY LETTER
     groupedLabels = []
     for i in range(len(timeStepGroups)):
-        letter = labelHeaders[i]
+        letter = labelHeaders[i]   # Gets the letter of the label in that timestep
         groupsPerTimeStep = []
         for count in range(timeStepGroups[i]):
             # list flattented list of all the timesteps
@@ -91,7 +93,8 @@ def generatePaths(groupedLabels, complexityLevel, numberOfTimesteps, numberOfGro
     for timestep in range(len(groupedLabels) - 1):
         nextTimeStepLength = len(groupedLabels[timestep + 1])
         currentTimeStepLength = len(groupedLabels[timestep])
-
+        # min number of flows is the length of the current timestep, max would be each group in the current timestep goes to
+        # each group in the next timestep
         flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
         while(flowNumber in flowsCount and len(flowsCount) != (nextTimeStepLength*currentTimeStepLength) - nextTimeStepLength): 
             flowNumber = random.randint(nextTimeStepLength, nextTimeStepLength*currentTimeStepLength)
@@ -276,7 +279,7 @@ def generateSetSum(n, sumVal, maxVal, mode):
 
 
 
-
+# function to dump information about the diagrams into a JSON
 def generateMetaData(diagramMetadata, numTimeSteps, numGroups, numFlows):
     tempSource = []
     for i in diagramMetadata['source']:
@@ -296,7 +299,7 @@ def generateMetaData(diagramMetadata, numTimeSteps, numGroups, numFlows):
         json.dump(diagramMetadata, outfile, indent=4, sort_keys=True)
 
 
-
+# Generation to allow to monitor the diagrams while they are being generated
 userInput = ""
 while(userInput != 'q' and imageCount <= 48):
     userInput = input("Enter Choice(e--easy, m--medium, h--hard, d--delete, n--next, q--quit)")
@@ -319,9 +322,3 @@ while(userInput != 'q' and imageCount <= 48):
     else:
         print("Invalid Input")
 
-# lowComplexity()
-# imageCount+=1
-# mediumComplexity()
-# imageCount+=1
-# highComplexity()
-# imageCount +=1
