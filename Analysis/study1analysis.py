@@ -47,6 +47,7 @@ with open("Analysis/QualtricsDataStudy1Prepped.csv") as csvFile:
                 q3 = row[i + 2]
                 q4 = row[i + 3]
 
+
                 if(q1 != ''):
                     q1Answer = answers[diagramCount - 1][1]
                     q1 = q1.replace(" ","")
@@ -114,6 +115,7 @@ print(results, "\n\n")
 # #########################################
 #  Participant Accuracy Stats
 # ########################################
+
 
 print("Average Participant Accuracy: ",(sum(participantAccuracy)/len(participantAccuracy))/18*100)
 print("Min Participant Accuracy: ", (min(participantAccuracy))/18*100)
